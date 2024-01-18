@@ -84,7 +84,7 @@ class SurahTab extends StatelessWidget {
                       child: Text(
                         "${surah.nomor}",
                         style: GoogleFonts.poppins(
-                            color: Colors.white, fontWeight: FontWeight.w500),
+                            color: text, fontWeight: FontWeight.w500),
                       ),
                     ),
                   )
@@ -100,7 +100,7 @@ class SurahTab extends StatelessWidget {
                     Text(
                       surah.namaLatin,
                       style: GoogleFonts.poppins(
-                          color: Colors.white,
+                          color: text,
                           fontWeight: FontWeight.w500,
                           fontSize: 16),
                     ),

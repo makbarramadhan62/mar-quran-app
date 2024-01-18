@@ -11,10 +11,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: _sideBar(context),
       backgroundColor: background,
-      appBar: _appBar(),
+      appBar: _appBar(size),
       body: DefaultTabController(
         length: 2,
         child: Padding(
@@ -22,7 +23,7 @@ class HomeScreen extends StatelessWidget {
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(
-                child: _greeting(),
+                child: _greeting(size),
               ),
               SliverAppBar(
                 pinned: true,
@@ -148,8 +149,8 @@ class HomeScreen extends StatelessWidget {
 
   TabBar _tab() {
     return TabBar(
-        unselectedLabelColor: text,
-        labelColor: Colors.white,
+        unselectedLabelColor: secondaryText,
+        labelColor: text,
         indicatorColor: primary,
         indicatorWeight: 3,
         tabs: [
@@ -167,101 +168,109 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column _greeting() {
+  Column _greeting(Size size) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: size.height * 0.01,
+        ),
         Text(
           'Assalamualaikum',
           style: GoogleFonts.poppins(
-              fontSize: 18, fontWeight: FontWeight.w500, color: text),
+              fontSize: 18, fontWeight: FontWeight.w500, color: secondaryText),
         ),
-        const SizedBox(
-          height: 4,
+        SizedBox(
+          height: size.height * 0.005,
         ),
         Text(
-          'Akbar',
+          'Akhi wa Ukhti',
           style: GoogleFonts.poppins(
-              fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white),
+              fontSize: 24, fontWeight: FontWeight.w600, color: text),
         ),
-        const SizedBox(
-          height: 24,
+        SizedBox(
+          height: size.height * 0.02,
         ),
-        _lastRead()
+        _quotes(size)
       ],
     );
   }
 
-  Stack _lastRead() {
-    return Stack(
-      children: [
-        Container(
-          height: 131,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [
-                    0,
-                    .6,
-                    1
-                  ],
-                  colors: [
-                    Color(0xFFDF98FA),
-                    Color(0xFFB070FD),
-                    Color(0xFF9055FF)
-                  ])),
+  Padding _quotes(Size size) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 1),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0, 1],
+            colors: [
+              Color(0xFFE5ECFD),
+              Color(0xFFF3F5FC),
+            ],
+          ),
         ),
-        Positioned(
-            bottom: 0,
-            right: 0,
-            child: SvgPicture.asset('assets/svgs/quran.svg')),
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SvgPicture.asset('assets/svgs/book.svg'),
-                  const SizedBox(
-                    width: 8,
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/svgs/book.svg'),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'Quotes',
+                        style: GoogleFonts.poppins(
+                            color: text, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
                   ),
                   Text(
-                    'Last Read',
+                    '"Maka nikmat Tuhanmu yang manakah yang kamu dustakan"',
                     style: GoogleFonts.poppins(
-                        color: Colors.white, fontWeight: FontWeight.w500),
+                        color: text, fontWeight: FontWeight.w600, fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Text(
+                    'QS. Ar- Rahman 55:13',
+                    style: GoogleFonts.poppins(
+                      color: text,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Al-Fatihah',
-                style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Text(
-                'Ayat No: 1',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
+            ),
+            Positioned(
+              bottom: -10,
+              right: -10,
+              child: SvgPicture.asset('assets/svgs/quran.svg'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  AppBar _appBar() => AppBar(
+  AppBar _appBar(Size size) => AppBar(
         backgroundColor: background,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -269,13 +278,13 @@ class HomeScreen extends StatelessWidget {
           IconButton(
               onPressed: (() => {}),
               icon: SvgPicture.asset('assets/svgs/menu-icon.svg')),
-          const SizedBox(
-            width: 24,
+          SizedBox(
+            width: size.width * 0.01,
           ),
           Text(
-            'Quran App',
-            style:
-                GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
+            'MAR Quran App',
+            style: GoogleFonts.poppins(
+                fontSize: 20, fontWeight: FontWeight.bold, color: text),
           ),
           const Spacer(),
           IconButton(

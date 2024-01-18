@@ -62,6 +62,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return FutureBuilder<Surah>(
       future: _getDetailSurah(widget.noSurat),
       initialData: null,
@@ -74,7 +75,7 @@ class _DetailScreenState extends State<DetailScreen> {
         Surah surah = snapshot.data!;
         return Scaffold(
           backgroundColor: background,
-          appBar: _appBar(context: context, surah: surah),
+          appBar: _appBar(context: context, surah: surah, size: size),
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(
@@ -85,6 +86,7 @@ class _DetailScreenState extends State<DetailScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ListView.separated(
                 itemBuilder: (context, index) => _ayatItem(
+                  size: size,
                   ayat: surah.ayat!.elementAt(
                     index + (widget.noSurat == 1 ? 1 : 0),
                   ),
@@ -108,8 +110,6 @@ class _DetailScreenState extends State<DetailScreen> {
       url = surah.audioFull[key];
     }
 
-    print(url);
-
     if (url != null) {
       if (audioPlayer.state == PlayerState.playing) {
         await audioPlayer.pause();
@@ -120,11 +120,22 @@ class _DetailScreenState extends State<DetailScreen> {
     }
   }
 
+  Future<void> _toggleAudio(Ayat ayat) async {
+    if (ayat.isPlaying) {
+      await stopAudio();
+    } else {
+      await playAudio("01", ayat: ayat);
+    }
+    setState(() {
+      ayat.isPlaying = audioPlayer.state == PlayerState.playing;
+    });
+  }
+
   Future<void> stopAudio() async {
     await audioPlayer.stop();
   }
 
-  Widget _ayatItem({required Ayat ayat}) => Padding(
+  Widget _ayatItem({required Ayat ayat, required Size size}) => Padding(
         padding: const EdgeInsets.only(top: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -132,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                  color: gray, borderRadius: BorderRadius.circular(10)),
+                  color: secondary, borderRadius: BorderRadius.circular(10)),
               child: Row(
                 children: [
                   Container(
@@ -149,56 +160,47 @@ class _DetailScreenState extends State<DetailScreen> {
                     )),
                   ),
                   const Spacer(),
-                  const Icon(
+                  Icon(
                     Icons.share_outlined,
-                    color: Colors.white,
+                    color: primary,
                   ),
                   const SizedBox(
                     width: 16,
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await playAudio("01", ayat: ayat);
-                      setState(() {
-                        ayat.isPlaying =
-                            audioPlayer.state == PlayerState.playing;
-                      });
+                      await _toggleAudio(ayat);
                     },
                     child: Icon(
                       ayat.isPlaying ? Icons.pause : Icons.play_arrow_outlined,
-                      color: Colors.white,
+                      color: primary,
                     ),
                   ),
                   const SizedBox(
                     width: 16,
                   ),
-                  const Icon(
+                  Icon(
                     Icons.bookmark_outline,
-                    color: Colors.white,
+                    color: primary,
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 24,
+            SizedBox(
+              height: size.height * 0.05,
             ),
             Text(
               ayat.teksArab,
               style: GoogleFonts.amiri(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+                  color: text, fontWeight: FontWeight.bold, fontSize: 28),
               textAlign: TextAlign.right,
             ),
-            const SizedBox(
-              height: 16,
+            SizedBox(
+              height: size.height * 0.025,
             ),
             Text(
               ayat.teksIndonesia,
               style: GoogleFonts.poppins(color: text, fontSize: 16),
-            ),
-            const SizedBox(
-              height: 16,
             ),
           ],
         ),
@@ -325,7 +327,10 @@ class _DetailScreenState extends State<DetailScreen> {
         ]),
       );
 
-  AppBar _appBar({required BuildContext context, required Surah surah}) =>
+  AppBar _appBar(
+          {required BuildContext context,
+          required Surah surah,
+          required Size size}) =>
       AppBar(
         backgroundColor: background,
         automaticallyImplyLeading: false,
@@ -337,13 +342,16 @@ class _DetailScreenState extends State<DetailScreen> {
                 stopAudio();
               },
               icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
-          const SizedBox(
-            width: 24,
+          SizedBox(
+            width: size.width * 0.01,
           ),
           Text(
             surah.namaLatin,
-            style:
-                GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: text,
+            ),
           ),
           const Spacer(),
           IconButton(
