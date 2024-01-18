@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:quran_app/models/tafsir.dart';
+
 import 'ayat.dart';
 
 List<Surah> surahFromJson(String str) {
@@ -21,6 +23,7 @@ class Surah {
     required this.deskripsi,
     required this.audioFull,
     this.ayat,
+    this.tafsir,
   });
 
   int nomor;
@@ -32,6 +35,7 @@ class Surah {
   String deskripsi;
   Map<String, String> audioFull;
   List<Ayat>? ayat;
+  List<Tafsir>? tafsir;
 
   factory Surah.fromJson(Map<String, dynamic> json) => Surah(
         nomor: json["nomor"],
@@ -44,6 +48,9 @@ class Surah {
         audioFull: Map<String, String>.from(json["audioFull"] ?? {}),
         ayat: json.containsKey('ayat')
             ? List<Ayat>.from(json["ayat"].map((x) => Ayat.fromJson(x)))
+            : null,
+        tafsir: json.containsKey('tafsir')
+            ? List<Tafsir>.from(json["tafsir"].map((x) => Tafsir.fromJson(x)))
             : null,
       );
 
@@ -58,6 +65,9 @@ class Surah {
         "audioFull": audioFull,
         "ayat": ayat != null
             ? List<dynamic>.from(ayat!.map((e) => e.toJson()))
+            : [],
+        "tafsir": tafsir != null
+            ? List<dynamic>.from(tafsir!.map((e) => e.toJson()))
             : [],
       };
 }

@@ -8,15 +8,15 @@ import '../models/ayat.dart';
 import '../models/surah.dart';
 import '../utilities/colors.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailSurahScreen extends StatefulWidget {
   final int noSurat;
-  const DetailScreen({super.key, required this.noSurat});
+  const DetailSurahScreen({super.key, required this.noSurat});
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  State<DetailSurahScreen> createState() => _DetailSurahScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailSurahScreenState extends State<DetailSurahScreen> {
   late AudioPlayer audioPlayer;
   late bool isPlaying;
 

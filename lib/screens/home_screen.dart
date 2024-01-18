@@ -18,29 +18,29 @@ class HomeScreen extends StatelessWidget {
       appBar: _appBar(size),
       body: DefaultTabController(
         length: 2,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverToBoxAdapter(
-                child: _greeting(size),
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(
+              child: _greeting(size),
+            ),
+            SliverAppBar(
+              pinned: true,
+              elevation: 0,
+              backgroundColor: background,
+              automaticallyImplyLeading: false,
+              shape: Border(
+                  bottom: BorderSide(
+                      width: 5,
+                      color: const Color(0xFFAAAAAA).withOpacity(.1))),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(0),
+                child: _tab(),
               ),
-              SliverAppBar(
-                pinned: true,
-                elevation: 0,
-                backgroundColor: background,
-                automaticallyImplyLeading: false,
-                shape: Border(
-                    bottom: BorderSide(
-                        width: 5,
-                        color: const Color(0xFFAAAAAA).withOpacity(.1))),
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(0),
-                  child: _tab(),
-                ),
-              )
-            ],
-            body: const TabBarView(
+            )
+          ],
+          body: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: TabBarView(
               children: [SurahTab(), TafsirTab()],
             ),
           ),
@@ -168,31 +168,36 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column _greeting(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: size.height * 0.01,
-        ),
-        Text(
-          'Assalamualaikum',
-          style: GoogleFonts.poppins(
-              fontSize: 18, fontWeight: FontWeight.w500, color: secondaryText),
-        ),
-        SizedBox(
-          height: size.height * 0.005,
-        ),
-        Text(
-          'Akhi wa Ukhti',
-          style: GoogleFonts.poppins(
-              fontSize: 24, fontWeight: FontWeight.w600, color: text),
-        ),
-        SizedBox(
-          height: size.height * 0.02,
-        ),
-        _quotes(size)
-      ],
+  Padding _greeting(Size size) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Text(
+            'Assalamualaikum',
+            style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: secondaryText),
+          ),
+          SizedBox(
+            height: size.height * 0.005,
+          ),
+          Text(
+            'Akhi wa Ukhti',
+            style: GoogleFonts.poppins(
+                fontSize: 24, fontWeight: FontWeight.w600, color: text),
+          ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
+          _quotes(size)
+        ],
+      ),
     );
   }
 

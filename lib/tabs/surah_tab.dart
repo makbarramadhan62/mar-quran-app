@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:dio/dio.dart';
 
 import '../models/surah.dart';
-import '../screens/detail_screen.dart';
+import '../screens/detail_surah_screen.dart';
 import '../utilities/colors.dart';
 
 class SurahTab extends StatelessWidget {
@@ -64,7 +64,7 @@ class SurahTab extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => DetailScreen(
+              builder: (context) => DetailSurahScreen(
                 noSurat: surah.nomor,
               ),
             ),

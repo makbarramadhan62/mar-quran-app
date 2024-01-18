@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dio/dio.dart';
+import 'package:quran_app/screens/detail_tafsir_screen.dart';
 
 import '../models/surah.dart';
 // import '../screens/detail_screen.dart';
@@ -62,13 +63,13 @@ class TafsirTab extends StatelessWidget {
       GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => DetailScreen(
-          //       noSurat: surah.nomor,
-          //     ),
-          //   ),
-          // );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DetailTafsirScreen(
+                noSurat: surah.nomor,
+              ),
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -93,58 +94,10 @@ class TafsirTab extends StatelessWidget {
               const SizedBox(
                 width: 16,
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      surah.namaLatin,
-                      style: GoogleFonts.poppins(
-                          color: text,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          surah.tempatTurun,
-                          style: GoogleFonts.poppins(
-                              color: text,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          width: 4,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: text),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "${surah.jumlahAyat} Ayat",
-                          style: GoogleFonts.poppins(
-                              color: text,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
               Text(
-                surah.nama,
-                style: GoogleFonts.amiri(
-                    color: primary, fontSize: 20, fontWeight: FontWeight.bold),
+                surah.namaLatin,
+                style: GoogleFonts.poppins(
+                    color: text, fontWeight: FontWeight.w500, fontSize: 16),
               ),
             ],
           ),
