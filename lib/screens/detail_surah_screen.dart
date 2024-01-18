@@ -202,6 +202,9 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
               ayat.teksIndonesia,
               style: GoogleFonts.poppins(color: text, fontSize: 16),
             ),
+            SizedBox(
+              height: size.height * 0.025,
+            ),
           ],
         ),
       );
