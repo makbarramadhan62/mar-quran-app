@@ -12,7 +12,10 @@ class SurahTab extends StatelessWidget {
 
   Future<List<Surah>> _getSurahList() async {
     try {
+      // await Future.delayed(const Duration(seconds: 5));
+
       Dio dio = Dio();
+      dio.options.connectTimeout = const Duration(seconds: 5);
       Response response = await dio.get('https://equran.id/api/v2/surat');
 
       if (response.statusCode == 200) {
@@ -45,15 +48,29 @@ class SurahTab extends StatelessWidget {
       future: _getSurahList(),
       initialData: const [],
       builder: ((context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (snapshot.data!.isEmpty) {
+          return Center(
+            child: Text(
+              'Gagal mengambil data Pastikan Anda terhubung ke internet.',
+              style: TextStyle(color: text, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          );
         }
         return ListView.separated(
-            itemBuilder: (context, index) => _surahItem(
-                context: context, surah: snapshot.data!.elementAt(index)),
-            separatorBuilder: (context, index) =>
-                Divider(color: const Color(0xFF7B80AD).withOpacity(.35)),
-            itemCount: snapshot.data!.length);
+          itemBuilder: (context, index) => _surahItem(
+            context: context,
+            surah: snapshot.data!.elementAt(index),
+          ),
+          separatorBuilder: (context, index) =>
+              Divider(color: const Color(0xFF7B80AD).withOpacity(.35)),
+          itemCount: snapshot.data!.length,
+        );
       }),
     );
   }

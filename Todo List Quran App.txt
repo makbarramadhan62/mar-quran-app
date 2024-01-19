@@ -3,5 +3,6 @@ Todo List Quran App
 - Fitur audio background + controller di status bar
 - Fitur Search -> buat pop up (?)
 - Component untuk fitur yang belum jadi (Pop up coming soon)
-- tampilan list tafsir bedakan sama surah
+- tampilan list tafsir bedakan sama surah [v]
+- loading screen ketika waiting fetch API [v]
 - ...
