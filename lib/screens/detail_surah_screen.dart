@@ -261,14 +261,21 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
               textAlign: TextAlign.right,
             ),
             SizedBox(
-              height: size.height * 0.025,
+              height: size.height * 0.035,
+            ),
+            Text(
+              ayat.teksLatin,
+              style: GoogleFonts.amiri(color: text, fontSize: 20),
+            ),
+            SizedBox(
+              height: size.height * 0.015,
             ),
             Text(
               ayat.teksIndonesia,
               style: GoogleFonts.poppins(color: text, fontSize: 16),
             ),
             SizedBox(
-              height: size.height * 0.025,
+              height: size.height * 0.005,
             ),
           ],
         ),

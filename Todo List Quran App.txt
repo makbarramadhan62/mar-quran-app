@@ -4,6 +4,8 @@ Todo List Quran App
 - Fitur Search -> buat pop up (?)
 - Component untuk fitur yang belum jadi (Pop up coming soon)
 - ubah jadi CuppertinoPageScafold biar animasiny enak (https://docs.flutter.dev/cookbook/navigation/navigation-basics)
+- tambahkan tulisan latinnya di bagian detail surah yaa
+- quotes klo bisa tiap buka tutup aplikasi berubah random
 - tampilan list tafsir bedakan sama surah [v]
 - loading screen ketika waiting fetch API [v]
 - tambah fitur doa doa (https://doa-doa-api-ahmadramadhan.fly.dev/) [v]
