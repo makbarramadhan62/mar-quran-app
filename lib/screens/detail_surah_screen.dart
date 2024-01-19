@@ -20,13 +20,17 @@ class DetailSurahScreen extends StatefulWidget {
 class _DetailSurahScreenState extends State<DetailSurahScreen> {
   late AudioPlayer audioPlayer;
   late bool isPlaying;
+  late Future<Surah> _futureSurah;
+  late bool _isAudioLoading;
 
   @override
   void initState() {
     super.initState();
+    _futureSurah = _getDetailSurah(widget.noSurat);
     audioPlayer = AudioPlayer();
     audioPlayer.setVolume(1.0);
     isPlaying = false;
+    _isAudioLoading = false;
   }
 
   Future<Surah> _getDetailSurah(int noSurat) async {
@@ -65,10 +69,11 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return FutureBuilder<Surah>(
-      future: _getDetailSurah(widget.noSurat),
+      future: _futureSurah,
       initialData: null,
       builder: ((context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            _isAudioLoading) {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: background,
@@ -110,27 +115,35 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
           );
         }
         Surah surah = snapshot.data!;
-        return Scaffold(
-          backgroundColor: background,
-          appBar: _appBar(context: context, surah: surah, size: size),
-          body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverToBoxAdapter(
-                child: _details(surah: surah),
-              )
-            ],
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: ListView.separated(
-                itemBuilder: (context, index) => _ayatItem(
-                  context: context,
-                  size: size,
-                  ayat: surah.ayat!.elementAt(
-                    index + (widget.noSurat == 1 ? 1 : 0),
+        return PopScope(
+          canPop: true,
+          onPopInvoked: (didPop) {
+            if (didPop) {
+              stopAudio();
+            }
+          },
+          child: Scaffold(
+            backgroundColor: background,
+            appBar: _appBar(context: context, surah: surah, size: size),
+            body: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverToBoxAdapter(
+                  child: _details(surah: surah),
+                )
+              ],
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: ListView.separated(
+                  itemBuilder: (context, index) => _ayatItem(
+                    context: context,
+                    size: size,
+                    ayat: surah.ayat!.elementAt(
+                      index + (widget.noSurat == 1 ? 1 : 0),
+                    ),
                   ),
+                  itemCount: surah.jumlahAyat + (widget.noSurat == 1 ? -1 : 0),
+                  separatorBuilder: (context, index) => Container(),
                 ),
-                itemCount: surah.jumlahAyat + (widget.noSurat == 1 ? -1 : 0),
-                separatorBuilder: (context, index) => Container(),
               ),
             ),
           ),
@@ -162,7 +175,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
     if (ayat.isPlaying) {
       await stopAudio();
     } else {
-      await playAudio("01", ayat: ayat);
+      await playAudio("05", ayat: ayat);
     }
     setState(() {
       ayat.isPlaying = audioPlayer.state == PlayerState.playing;
