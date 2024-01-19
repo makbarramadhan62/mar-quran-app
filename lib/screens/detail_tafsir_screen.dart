@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import "package:audioplayers/audioplayers.dart";
 import 'package:quran_app/models/tafsir.dart';
+import 'package:quran_app/utilities/coming_soon.dart';
 
-import '../models/ayat.dart';
 import '../models/surah.dart';
 import '../utilities/colors.dart';
 
@@ -67,9 +67,44 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
       future: _getDetailSurah(widget.noSurat),
       initialData: null,
       builder: ((context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
+            appBar: AppBar(
+              backgroundColor: background,
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              title: Row(children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
+                SizedBox(
+                  width: size.width * 0.01,
+                ),
+                Text(
+                  "Memuat...",
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: text,
+                  ),
+                ),
+              ]),
+            ),
             backgroundColor: background,
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text(
+              'Gagal mengambil data Pastikan Anda terhubung ke internet.',
+              style: TextStyle(color: text, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           );
         }
         Surah surah = snapshot.data!;
@@ -126,16 +161,26 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
                     )),
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.share_outlined,
-                    color: primary,
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: Icon(
+                      Icons.share_outlined,
+                      color: primary,
+                    ),
                   ),
                   const SizedBox(
                     width: 16,
                   ),
-                  Icon(
-                    Icons.bookmark_outline,
-                    color: primary,
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: Icon(
+                      Icons.bookmark_outline,
+                      color: primary,
+                    ),
                   ),
                 ],
               ),

@@ -5,4 +5,5 @@ Todo List Quran App
 - Component untuk fitur yang belum jadi (Pop up coming soon)
 - tampilan list tafsir bedakan sama surah [v]
 - loading screen ketika waiting fetch API [v]
+- tambah fitur doa doa (https://doa-doa-api-ahmadramadhan.fly.dev/)
 - ...

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quran_app/tabs/doa_tab.dart';
 import 'package:quran_app/utilities/colors.dart';
+import 'package:quran_app/utilities/coming_soon.dart';
 
 import '../tabs/surah_tab.dart';
 import '../tabs/tafsir_tab.dart';
@@ -13,11 +15,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: _sideBar(context),
       backgroundColor: background,
-      appBar: _appBar(size),
+      appBar: _appBar(size, context),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverToBoxAdapter(
@@ -41,7 +42,7 @@ class HomeScreen extends StatelessWidget {
           body: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: TabBarView(
-              children: [SurahTab(), TafsirTab()],
+              children: [SurahTab(), TafsirTab(), DoaTab()],
             ),
           ),
         ),
@@ -49,103 +50,28 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  _sideBar(context) {
-    Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Drawer(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            bottomRight: Radius.circular(20),
+  AppBar _appBar(Size size, BuildContext context) => AppBar(
+        backgroundColor: background,
+        surfaceTintColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: Row(children: [
+          SizedBox(
+            width: size.width * 0.01,
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Material(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: size.height * 0.025),
-                Image.asset(
-                  "assets/images/logo_landscape.png",
-                  scale: 1.5,
-                ),
-                SizedBox(height: size.height * 0.025),
-                buildMenuItem(
-                  textValue: 'Informasi Dataset',
-                  icon: Icons.dataset_outlined,
-                  onClicked: () {
-                    // Navigator.pop(context);
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const DatasetScreen(),
-                    //   ),
-                    // );
-                  },
-                ),
-                SizedBox(height: size.height * 0.025),
-                buildMenuItem(
-                  textValue: 'Cara Penggunaan',
-                  icon: Icons.question_mark_outlined,
-                  onClicked: () {
-                    // Navigator.pop(context);
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const HowToUseScreen(),
-                    //   ),
-                    // );
-                  },
-                ),
-                SizedBox(height: size.height * 0.025),
-                buildMenuItem(
-                  textValue: 'Versi Aplikasi',
-                  icon: Icons.info_outline,
-                  onClicked: () {
-                    // Navigator.pop(context);
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const AppVersion(),
-                    //   ),
-                    // );
-                  },
-                ),
-                const Spacer(),
-                const Divider(
-                  thickness: 2,
-                ),
-                buildMenuItem(
-                  textValue: 'Keluar',
-                  icon: Icons.logout,
-                  onClicked: () async {
-                    // final action = await AlertDialogs.yesCancelDialog(
-                    //     context, 'Keluar', 'Apa kamu yakin untuk keluar?');
-                    // if (action == DialogsAction.yes) {
-                    //   exit(0);
-                    // }
-                  },
-                ),
-              ],
-            ),
+          Text(
+            'MAR Quran App',
+            style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: secondaryText),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildMenuItem({
-    required String textValue,
-    required IconData icon,
-    VoidCallback? onClicked,
-  }) {
-    const hoverColor = Colors.white70;
-
-    return ListTile(
-      leading: Icon(icon, color: primary),
-      title: Text(textValue, style: TextStyle(fontSize: 16, color: text)),
-      hoverColor: hoverColor,
-      onTap: onClicked,
-    );
-  }
+          const Spacer(),
+          IconButton(
+              onPressed: (() => {showComingSoonDialog(context)}),
+              icon: SvgPicture.asset('assets/svgs/search-icon.svg')),
+        ]),
+      );
 
   TabBar _tab() {
     return TabBar(
@@ -156,6 +82,7 @@ class HomeScreen extends StatelessWidget {
         tabs: [
           _tabItem(label: "Surah"),
           _tabItem(label: "Tafsir"),
+          _tabItem(label: "Doa"),
         ]);
   }
 
@@ -274,27 +201,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  AppBar _appBar(Size size) => AppBar(
-        backgroundColor: background,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: Row(children: [
-          IconButton(
-              onPressed: (() => {}),
-              icon: SvgPicture.asset('assets/svgs/menu-icon.svg')),
-          SizedBox(
-            width: size.width * 0.01,
-          ),
-          Text(
-            'MAR Quran App',
-            style: GoogleFonts.poppins(
-                fontSize: 20, fontWeight: FontWeight.bold, color: text),
-          ),
-          const Spacer(),
-          IconButton(
-              onPressed: (() => {}),
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg')),
-        ]),
-      );
 }

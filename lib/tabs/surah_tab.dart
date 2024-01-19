@@ -12,8 +12,6 @@ class SurahTab extends StatelessWidget {
 
   Future<List<Surah>> _getSurahList() async {
     try {
-      // await Future.delayed(const Duration(seconds: 5));
-
       Dio dio = Dio();
       dio.options.connectTimeout = const Duration(seconds: 5);
       Response response = await dio.get('https://equran.id/api/v2/surat');

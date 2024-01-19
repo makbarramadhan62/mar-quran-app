@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import "package:audioplayers/audioplayers.dart";
+import 'package:quran_app/utilities/coming_soon.dart';
 
 import '../models/ayat.dart';
 import '../models/surah.dart';
@@ -67,9 +68,45 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
       future: _getDetailSurah(widget.noSurat),
       initialData: null,
       builder: ((context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
+            appBar: AppBar(
+              backgroundColor: background,
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              title: Row(children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      stopAudio();
+                    },
+                    icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
+                SizedBox(
+                  width: size.width * 0.01,
+                ),
+                Text(
+                  "Memuat...",
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: text,
+                  ),
+                ),
+              ]),
+            ),
             backgroundColor: background,
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text(
+              'Gagal mengambil data Pastikan Anda terhubung ke internet.',
+              style: TextStyle(color: text, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           );
         }
         Surah surah = snapshot.data!;
@@ -86,6 +123,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ListView.separated(
                 itemBuilder: (context, index) => _ayatItem(
+                  context: context,
                   size: size,
                   ayat: surah.ayat!.elementAt(
                     index + (widget.noSurat == 1 ? 1 : 0),
@@ -135,7 +173,11 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
     await audioPlayer.stop();
   }
 
-  Widget _ayatItem({required Ayat ayat, required Size size}) => Padding(
+  Widget _ayatItem(
+          {required Ayat ayat,
+          required Size size,
+          required BuildContext context}) =>
+      Padding(
         padding: const EdgeInsets.only(top: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -160,9 +202,14 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                     )),
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.share_outlined,
-                    color: primary,
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: Icon(
+                      Icons.share_outlined,
+                      color: primary,
+                    ),
                   ),
                   const SizedBox(
                     width: 16,
@@ -179,9 +226,14 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   const SizedBox(
                     width: 16,
                   ),
-                  Icon(
-                    Icons.bookmark_outline,
-                    color: primary,
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: Icon(
+                      Icons.bookmark_outline,
+                      color: primary,
+                    ),
                   ),
                 ],
               ),
@@ -358,8 +410,11 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
           ),
           const Spacer(),
           IconButton(
-              onPressed: (() => {}),
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg')),
+            onPressed: (() => {
+                  showComingSoonDialog(context),
+                }),
+            icon: SvgPicture.asset('assets/svgs/search-icon.svg'),
+          ),
         ]),
       );
 }
