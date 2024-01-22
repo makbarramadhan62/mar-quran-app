@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_app/screens/detail_surah_screen.dart';
 import 'package:quran_app/tabs/doa_tab.dart';
 import 'package:quran_app/utilities/colors.dart';
 import 'package:quran_app/utilities/coming_soon.dart';
@@ -31,8 +30,12 @@ class HomeScreen extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               elevation: 0,
-              backgroundColor: background,
               automaticallyImplyLeading: false,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  color: background,
+                ),
+              ),
               shape: Border(
                   bottom: BorderSide(
                       width: 5,
