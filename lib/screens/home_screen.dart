@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,6 +7,7 @@ import 'package:quran_app/tabs/doa_tab.dart';
 import 'package:quran_app/utilities/colors.dart';
 import 'package:quran_app/utilities/coming_soon.dart';
 
+import '../list_data/quotes.dart';
 import '../tabs/surah_tab.dart';
 import '../tabs/tafsir_tab.dart';
 
@@ -73,28 +76,6 @@ class HomeScreen extends StatelessWidget {
         ]),
       );
 
-  TabBar _tab() {
-    return TabBar(
-        unselectedLabelColor: secondaryText,
-        labelColor: text,
-        indicatorColor: primary,
-        indicatorWeight: 3,
-        tabs: [
-          _tabItem(label: "Surah"),
-          _tabItem(label: "Tafsir"),
-          _tabItem(label: "Doa"),
-        ]);
-  }
-
-  Tab _tabItem({required String label}) {
-    return Tab(
-      child: Text(
-        label,
-        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
   Padding _greeting(Size size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -129,6 +110,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Padding _quotes(Size size) {
+    Quote randomQuote = Quotes.quotes[Random().nextInt(Quotes.quotes.length)];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
       child: Container(
@@ -175,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                     height: size.height * 0.01,
                   ),
                   Text(
-                    '"Maka nikmat Tuhanmu yang manakah yang kamu dustakan"',
+                    randomQuote.text,
                     style: GoogleFonts.poppins(
                         color: text, fontWeight: FontWeight.w600, fontSize: 18),
                   ),
@@ -183,7 +165,7 @@ class HomeScreen extends StatelessWidget {
                     height: size.height * 0.01,
                   ),
                   Text(
-                    'QS. Ar- Rahman 55:13',
+                    randomQuote.source,
                     style: GoogleFonts.poppins(
                       color: text,
                     ),
@@ -198,6 +180,28 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  TabBar _tab() {
+    return TabBar(
+        unselectedLabelColor: secondaryText,
+        labelColor: text,
+        indicatorColor: primary,
+        indicatorWeight: 3,
+        tabs: [
+          _tabItem(label: "Surah"),
+          _tabItem(label: "Tafsir"),
+          _tabItem(label: "Doa"),
+        ]);
+  }
+
+  Tab _tabItem({required String label}) {
+    return Tab(
+      child: Text(
+        label,
+        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     );
   }

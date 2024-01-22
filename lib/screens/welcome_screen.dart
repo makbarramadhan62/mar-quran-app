@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quran_app/utilities/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_screen.dart';
 
@@ -10,6 +11,35 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: checkFirstTime(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+
+        bool isFirstTime = snapshot.data ?? true;
+
+        if (isFirstTime) {
+          return buildWelcomeScreen(context);
+        } else {
+          return const HomeScreen();
+        }
+      },
+    );
+  }
+
+  Future<bool> checkFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstTime = prefs.getBool('first_time') ?? true;
+
+    if (isFirstTime) {
+      prefs.setBool('first_time', false);
+    }
+    return isFirstTime;
+  }
+
+  Widget buildWelcomeScreen(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: background,
@@ -70,7 +100,7 @@ class WelcomeScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
+                      builder: (context) => const HomeScreen(),
                     ));
                   },
                   style: ElevatedButton.styleFrom(

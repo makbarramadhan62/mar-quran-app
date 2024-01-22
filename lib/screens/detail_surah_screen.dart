@@ -152,6 +152,163 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
     );
   }
 
+  AppBar _appBar({
+    required BuildContext context,
+    required Surah surah,
+    required Size size,
+  }) =>
+      AppBar(
+        backgroundColor: background,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                stopAudio();
+              },
+              icon: SvgPicture.asset('assets/svgs/back-icon.svg'),
+            ),
+            SizedBox(
+              width: size.width * 0.01,
+            ),
+            Text(
+              surah.namaLatin,
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: text,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _details({required Surah surah}) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Stack(
+          children: [
+            Container(
+              height: 257,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [0, 1],
+                  colors: [
+                    Color(0xFF60A5FA),
+                    Color(0xFF1E40AF),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Opacity(
+                opacity: .2,
+                child: SvgPicture.asset(
+                  'assets/svgs/quran.svg',
+                  width: 324 - 55,
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(28),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        surah.namaLatin,
+                        style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 26),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          await playAudio("01", surah: surah);
+                          setState(() {
+                            isPlaying =
+                                audioPlayer.state == PlayerState.playing;
+                          });
+                        },
+                        child: Icon(
+                          isPlaying
+                              ? Icons.pause_circle_filled_rounded
+                              : Icons.play_circle_fill_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    surah.arti,
+                    style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
+                  ),
+                  Divider(
+                    color: Colors.white.withOpacity(.35),
+                    thickness: 2,
+                    height: 32,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        surah.tempatTurun,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 4,
+                        height: 4,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Colors.white),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "${surah.jumlahAyat} Ayat",
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  SvgPicture.asset('assets/svgs/bismillah.svg')
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+
   Future<void> playAudio(String key, {Ayat? ayat, Surah? surah}) async {
     String? url;
 
@@ -167,19 +324,18 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
       } else {
         audioPlayer.setVolume(1.0);
         await audioPlayer.play(UrlSource(url));
+
+        audioPlayer.onPlayerComplete.listen((event) {
+          setState(() {
+            if (ayat != null) {
+              ayat.isPlaying = false;
+            } else {
+              isPlaying = false;
+            }
+          });
+        });
       }
     }
-  }
-
-  Future<void> _toggleAudio(Ayat ayat) async {
-    if (ayat.isPlaying) {
-      await stopAudio();
-    } else {
-      await playAudio("05", ayat: ayat);
-    }
-    setState(() {
-      ayat.isPlaying = audioPlayer.state == PlayerState.playing;
-    });
   }
 
   Future<void> stopAudio() async {
@@ -229,7 +385,13 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await _toggleAudio(ayat);
+                      await playAudio("01", ayat: ayat);
+
+                      setState(() {
+                        ayat.isPlaying =
+                            audioPlayer.state == PlayerState.playing;
+                        if (isPlaying) isPlaying = false;
+                      });
                     },
                     child: Icon(
                       ayat.isPlaying ? Icons.pause : Icons.play_arrow_outlined,
@@ -279,162 +441,5 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
             ),
           ],
         ),
-      );
-
-  Widget _details({required Surah surah}) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Stack(children: [
-          Container(
-            height: 257,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0, 1],
-                colors: [
-                  Color(0xFF60A5FA),
-                  Color(0xFF1E40AF),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Opacity(
-              opacity: .2,
-              child: SvgPicture.asset(
-                'assets/svgs/quran.svg',
-                width: 324 - 55,
-              ),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      surah.namaLatin,
-                      style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 26),
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        await playAudio("01", surah: surah);
-                        setState(() {
-                          isPlaying = audioPlayer.state == PlayerState.playing;
-                        });
-                      },
-                      child: Icon(
-                        isPlaying
-                            ? Icons.pause_circle_filled_rounded
-                            : Icons.play_circle_fill_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  surah.arti,
-                  style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
-                ),
-                Divider(
-                  color: Colors.white.withOpacity(.35),
-                  thickness: 2,
-                  height: 32,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      surah.tempatTurun,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      width: 4,
-                      height: 4,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: Colors.white),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "${surah.jumlahAyat} Ayat",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                SvgPicture.asset('assets/svgs/bismillah.svg')
-              ],
-            ),
-          )
-        ]),
-      );
-
-  AppBar _appBar(
-          {required BuildContext context,
-          required Surah surah,
-          required Size size}) =>
-      AppBar(
-        backgroundColor: background,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: Row(children: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                stopAudio();
-              },
-              icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
-          SizedBox(
-            width: size.width * 0.01,
-          ),
-          Text(
-            surah.namaLatin,
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: text,
-            ),
-          ),
-          const Spacer(),
-          IconButton(
-            onPressed: (() => {
-                  showComingSoonDialog(context),
-                }),
-            icon: SvgPicture.asset('assets/svgs/search-icon.svg'),
-          ),
-        ]),
       );
 }
