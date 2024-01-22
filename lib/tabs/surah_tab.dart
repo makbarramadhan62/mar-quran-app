@@ -77,13 +77,7 @@ class SurahTab extends StatelessWidget {
       GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailSurahScreen(
-                noSurat: surah.nomor,
-              ),
-            ),
-          );
+          Navigator.of(context).push(_createRoute(surah));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -165,4 +159,26 @@ class SurahTab extends StatelessWidget {
           ),
         ),
       );
+
+  Route _createRoute(Surah surah) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          DetailSurahScreen(
+        noSurat: surah.nomor,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 }

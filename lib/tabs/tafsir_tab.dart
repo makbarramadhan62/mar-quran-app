@@ -62,7 +62,7 @@ class TafsirTab extends StatelessWidget {
           );
         }
         return ListView.separated(
-          itemBuilder: (context, index) => _surahItem(
+          itemBuilder: (context, index) => _tafsirItem(
             context: context,
             surah: snapshot.data!.elementAt(index),
           ),
@@ -74,17 +74,11 @@ class TafsirTab extends StatelessWidget {
     );
   }
 
-  Widget _surahItem({required Surah surah, required BuildContext context}) =>
+  Widget _tafsirItem({required Surah surah, required BuildContext context}) =>
       GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailTafsirScreen(
-                noSurat: surah.nomor,
-              ),
-            ),
-          );
+          Navigator.of(context).push(_createRoute(surah));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -118,4 +112,26 @@ class TafsirTab extends StatelessWidget {
           ),
         ),
       );
+
+  Route _createRoute(Surah surah) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          DetailTafsirScreen(
+        noSurat: surah.nomor,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 }
