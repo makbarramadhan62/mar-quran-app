@@ -3,7 +3,6 @@ Todo List Quran App
 [Todo]
 - Fitur audio background + controller di status bar
 - Fitur Search -> buat pop up (?)
-- ubah jadi CuppertinoPageScafold biar animasiny enak (https://docs.flutter.dev/cookbook/navigation/navigation-basics)
 - ...
 
 [Done]

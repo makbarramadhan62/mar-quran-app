@@ -73,10 +73,6 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: secondaryText),
           ),
-          const Spacer(),
-          IconButton(
-              onPressed: (() => {showComingSoonDialog(context)}),
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg')),
         ]),
       );
 
