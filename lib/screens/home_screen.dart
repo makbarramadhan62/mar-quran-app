@@ -5,14 +5,27 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quran_app/tabs/doa_tab.dart';
 import 'package:quran_app/utilities/colors.dart';
-import 'package:quran_app/utilities/coming_soon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../list_data/quotes.dart';
 import '../tabs/surah_tab.dart';
 import '../tabs/tafsir_tab.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<int> savedQuoteIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    savedQuoteIndex = _getSavedQuoteIndex();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +122,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Future<int> _getSavedQuoteIndex() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('quoteIndex') ?? Random().nextInt(Quotes.quotes.length);
+  }
+
   Padding _quotes(Size size) {
-    Quote randomQuote = Quotes.quotes[Random().nextInt(Quotes.quotes.length)];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
       child: Container(
@@ -133,52 +150,75 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: FutureBuilder<int>(
+          future: savedQuoteIndex,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Loading state
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              // Error state
+              return const Center(
+                child: Text('Error loading quote'),
+              );
+            } else {
+              // Loaded state
+              int savedIndex = snapshot.data!;
+              Quote randomQuote = Quotes.quotes[savedIndex];
+
+              return Stack(
                 children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset('assets/svgs/book.svg'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        'Quotes',
-                        style: GoogleFonts.poppins(
-                            color: text, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  Text(
-                    randomQuote.text,
-                    style: GoogleFonts.poppins(
-                        color: text, fontWeight: FontWeight.w600, fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  Text(
-                    randomQuote.source,
-                    style: GoogleFonts.poppins(
-                      color: text,
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset('assets/svgs/book.svg'),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'Quotes',
+                              style: GoogleFonts.poppins(
+                                  color: text, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Text(
+                          randomQuote.text,
+                          style: GoogleFonts.poppins(
+                              color: text,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Text(
+                          randomQuote.source,
+                          style: GoogleFonts.poppins(
+                            color: text,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Positioned(
+                    bottom: -10,
+                    right: -10,
+                    child: SvgPicture.asset('assets/svgs/quran.svg'),
+                  ),
                 ],
-              ),
-            ),
-            Positioned(
-              bottom: -10,
-              right: -10,
-              child: SvgPicture.asset('assets/svgs/quran.svg'),
-            ),
-          ],
+              );
+            }
+          },
         ),
       ),
     );
