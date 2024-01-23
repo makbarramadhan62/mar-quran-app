@@ -118,7 +118,9 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
               )
             ],
             body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+              ),
               child: ListView.separated(
                 itemBuilder: (context, index) => _tafsirItem(
                   size: size,
@@ -136,74 +138,40 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
     );
   }
 
-  Widget _tafsirItem({required Tafsir tafsir, required Size size}) => Padding(
-        padding: const EdgeInsets.only(top: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xffC7DFFF),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 27,
-                    height: 27,
-                    decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius: BorderRadius.circular(27 / 2)),
-                    child: Center(
-                        child: Text(
-                      '${tafsir.ayat}',
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500, color: Colors.white),
-                    )),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: Icon(
-                      Icons.share_outlined,
-                      color: primary,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: Icon(
-                      Icons.bookmark_outline,
-                      color: primary,
-                    ),
-                  ),
-                ],
-              ),
+  AppBar _appBar(
+          {required BuildContext context,
+          required Surah surah,
+          required Size size}) =>
+      AppBar(
+        backgroundColor: background,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: Row(children: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
+          SizedBox(
+            width: size.width * 0.01,
+          ),
+          Text(
+            surah.namaLatin,
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: text,
             ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Text(
-              tafsir.teks,
-              style: GoogleFonts.poppins(
-                  color: text, fontWeight: FontWeight.w500, fontSize: 18),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-          ],
-        ),
+          ),
+        ]),
       );
 
   Widget _details({required Surah surah}) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.only(
+        right: 24,
+        left: 24,
+        bottom: 24,
+      ),
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -318,35 +286,69 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
         ),
       ));
 
-  AppBar _appBar(
-          {required BuildContext context,
-          required Surah surah,
-          required Size size}) =>
-      AppBar(
-        backgroundColor: background,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: Row(children: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
-          SizedBox(
-            width: size.width * 0.01,
-          ),
-          Text(
-            surah.namaLatin,
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: text,
+  Widget _tafsirItem({required Tafsir tafsir, required Size size}) => Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xffC7DFFF),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 27,
+                    height: 27,
+                    decoration: BoxDecoration(
+                        color: primary,
+                        borderRadius: BorderRadius.circular(27 / 2)),
+                    child: Center(
+                        child: Text(
+                      '${tafsir.ayat}',
+                      style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w500, color: Colors.white),
+                    )),
+                  ),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: Icon(
+                      Icons.share_outlined,
+                      color: primary,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: Icon(
+                      Icons.bookmark_outline,
+                      color: primary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Spacer(),
-          IconButton(
-              onPressed: (() => {}),
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg')),
-        ]),
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+            Text(
+              tafsir.teks,
+              style: GoogleFonts.poppins(
+                  color: text, fontWeight: FontWeight.w500, fontSize: 18),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+          ],
+        ),
       );
 }

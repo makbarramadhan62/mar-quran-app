@@ -186,7 +186,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
       );
 
   Widget _details({required Surah surah}) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.only(right: 24, left: 24, bottom: 24),
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -355,7 +355,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
           required Size size,
           required BuildContext context}) =>
       Padding(
-        padding: const EdgeInsets.only(top: 24),
+        padding: const EdgeInsets.only(bottom: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -423,20 +423,27 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.025,
             ),
             Text(
               ayat.teksArab,
               style: GoogleFonts.amiri(
-                  color: text, fontWeight: FontWeight.bold, fontSize: 28),
+                color: text,
+                fontWeight: FontWeight.bold,
+                fontSize: 28,
+                height: 3,
+              ),
               textAlign: TextAlign.right,
             ),
             SizedBox(
-              height: size.height * 0.035,
+              height: size.height * 0.015,
             ),
             Text(
               ayat.teksLatin,
-              style: GoogleFonts.amiri(color: text, fontSize: 20),
+              style: GoogleFonts.amiri(
+                color: text,
+                fontSize: 20,
+              ),
             ),
             SizedBox(
               height: size.height * 0.015,
@@ -444,9 +451,6 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
             Text(
               ayat.teksIndonesia,
               style: GoogleFonts.poppins(color: text, fontSize: 16),
-            ),
-            SizedBox(
-              height: size.height * 0.005,
             ),
           ],
         ),
