@@ -241,7 +241,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          await playAudio("01", surah: surah);
+                          await playAudio("05", surah: surah);
                           setState(() {
                             isPlaying =
                                 audioPlayer.state == PlayerState.playing;
