@@ -1,8 +1,6 @@
 Todo List Quran App
 
 [Todo]
-- Fitur audio background + controller di status bar
-- Fitur Search -> buat pop up (?)
 - ...
 
 [Done]
@@ -14,3 +12,4 @@ Todo List Quran App
 - bug habis ayatny selesai iconnya ga balik [v]
 - quotes klo bisa tiap buka tutup aplikasi berubah random [v]
 - fix welcome screen hanya pertama kali habis diinstall [v]
+- Fitur Search [v]

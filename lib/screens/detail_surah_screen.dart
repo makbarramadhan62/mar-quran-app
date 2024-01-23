@@ -186,29 +186,34 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
       );
 
   Widget _details({required Surah surah}) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          borderRadius: BorderRadius.circular(10),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0, 1],
+            colors: [
+              Color(0xFFE5ECFD),
+              Color(0xFFF3F5FC),
+            ],
+          ),
+        ),
         child: Stack(
           children: [
-            Container(
-              height: 257,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0, 1],
-                  colors: [
-                    Color(0xFF60A5FA),
-                    Color(0xFF1E40AF),
-                  ],
-                ),
-              ),
-            ),
             Positioned(
-              bottom: 0,
-              right: 0,
+              bottom: -10,
+              right: -10,
               child: Opacity(
-                opacity: .2,
+                opacity: .5,
                 child: SvgPicture.asset(
                   'assets/svgs/quran.svg',
                   width: 324 - 55,
@@ -227,7 +232,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       Text(
                         surah.namaLatin,
                         style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: text,
                             fontWeight: FontWeight.w500,
                             fontSize: 26),
                       ),
@@ -246,7 +251,8 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                           isPlaying
                               ? Icons.pause_circle_filled_rounded
                               : Icons.play_circle_fill_rounded,
-                          color: Colors.white,
+                          color: primary,
+                          size: 28,
                         ),
                       ),
                     ],
@@ -257,12 +263,10 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   Text(
                     surah.arti,
                     style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16),
+                        color: text, fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   Divider(
-                    color: Colors.white.withOpacity(.35),
+                    color: text.withOpacity(.35),
                     thickness: 2,
                     height: 32,
                   ),
@@ -272,7 +276,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       Text(
                         surah.tempatTurun,
                         style: GoogleFonts.poppins(
-                          color: Colors.white,
+                          color: text,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -284,7 +288,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                         height: 4,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2),
-                            color: Colors.white),
+                            color: text),
                       ),
                       const SizedBox(
                         width: 5,
@@ -292,7 +296,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                       Text(
                         "${surah.jumlahAyat} Ayat",
                         style: GoogleFonts.poppins(
-                          color: Colors.white,
+                          color: text,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -301,13 +305,17 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  SvgPicture.asset('assets/svgs/bismillah.svg')
+                  SvgPicture.asset(
+                    'assets/svgs/bismillah.svg',
+                    // ignore: deprecated_member_use
+                    color: text,
+                  )
                 ],
               ),
             )
           ],
         ),
-      );
+      ));
 
   Future<void> playAudio(String key, {Ayat? ayat, Surah? surah}) async {
     String? url;
@@ -354,7 +362,9 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                  color: secondary, borderRadius: BorderRadius.circular(10)),
+                color: const Color(0xffC7DFFF),
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Row(
                 children: [
                   Container(
@@ -385,8 +395,7 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await playAudio("01", ayat: ayat);
-
+                      await playAudio("05", ayat: ayat);
                       setState(() {
                         ayat.isPlaying =
                             audioPlayer.state == PlayerState.playing;

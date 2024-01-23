@@ -144,7 +144,9 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                  color: secondary, borderRadius: BorderRadius.circular(10)),
+                color: const Color(0xffC7DFFF),
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Row(
                 children: [
                   Container(

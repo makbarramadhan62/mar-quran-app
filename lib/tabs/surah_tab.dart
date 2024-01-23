@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../screens/detail_surah_screen.dart';
 
 import '../models/surah.dart';
-import '../screens/detail_surah_screen.dart';
 import '../utilities/colors.dart';
 
 class SurahTab extends StatefulWidget {
@@ -77,10 +77,18 @@ class _SurahTabState extends State<SurahTab> {
   }
 
   List<Surah> _searchSurah(String query) {
-    query = query.toLowerCase();
+    query = _preprocessQuery(query.toLowerCase());
+
     return surahList.where((surah) {
-      return surah.namaLatin.toLowerCase().contains(query);
+      String processedNamaLatin =
+          _preprocessQuery(surah.namaLatin.toLowerCase());
+      return processedNamaLatin.contains(query);
     }).toList();
+  }
+
+  String _preprocessQuery(String query) {
+    query = query.replaceAll(RegExp(r'[^\w\s]'), '');
+    return query;
   }
 
   void _onSearchTextChanged(String query) {
