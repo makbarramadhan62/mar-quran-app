@@ -17,4 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ## How to Get this App?
 
-download project -> https://drive.google.com/file/d/1pRM65r4w2l84209_ooxecDCG91Ema2ss/view?usp=sharing
+download project -> https://drive.google.com/file/d/1Dwc0zNCEe3rV5m9_r6JVX-LXHD48a1_F/view?usp=sharing
