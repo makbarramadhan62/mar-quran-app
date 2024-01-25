@@ -312,28 +312,6 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
                           fontWeight: FontWeight.w500, color: Colors.white),
                     )),
                   ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: Icon(
-                      Icons.share_outlined,
-                      color: primary,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: Icon(
-                      Icons.bookmark_outline,
-                      color: primary,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -343,7 +321,10 @@ class _DetailTafsirnState extends State<DetailTafsirScreen> {
             Text(
               tafsir.teks,
               style: GoogleFonts.poppins(
-                  color: text, fontWeight: FontWeight.w500, fontSize: 18),
+                color: text,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
             ),
             SizedBox(
               height: size.height * 0.01,

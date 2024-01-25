@@ -212,44 +212,45 @@ class _DoaTabState extends State<DoaTab> {
           ),
           children: [
             ListTile(
-                title: Column(
-                  children: [
-                    Text(
-                      doa.ayat,
-                      style: GoogleFonts.amiri(
-                        color: text,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        height: 2,
-                      ),
-                      textAlign: TextAlign.right,
+              title: Column(
+                children: [
+                  Text(
+                    doa.ayat,
+                    style: GoogleFonts.amiri(
+                      color: text,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                      height: 2,
                     ),
-                    const SizedBox(
-                      height: 10,
+                    textAlign: TextAlign.right,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    doa.latin,
+                    style: GoogleFonts.poppins(
+                      color: text,
+                      fontStyle: FontStyle.italic,
                     ),
-                  ],
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      doa.latin,
-                      style: GoogleFonts.poppins(
-                        color: text,
-                        fontStyle: FontStyle.italic,
-                      ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Artinya: ${doa.artinya}',
+                    style: GoogleFonts.poppins(
+                      color: text,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Artinya: ${doa.artinya}',
-                      style: GoogleFonts.poppins(
-                        color: text,
-                      ),
-                    ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       );

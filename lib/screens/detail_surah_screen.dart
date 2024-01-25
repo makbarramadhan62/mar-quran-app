@@ -382,18 +382,6 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: Icon(
-                      Icons.share_outlined,
-                      color: primary,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  GestureDetector(
                     onTap: () async {
                       await playAudio("05", ayat: ayat);
                       setState(() {
@@ -404,18 +392,6 @@ class _DetailSurahScreenState extends State<DetailSurahScreen> {
                     },
                     child: Icon(
                       ayat.isPlaying ? Icons.pause : Icons.play_arrow_outlined,
-                      color: primary,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: Icon(
-                      Icons.bookmark_outline,
                       color: primary,
                     ),
                   ),
